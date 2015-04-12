@@ -10,17 +10,18 @@ At the end of the workshop, you'll be able to strap on an Oculus DK2 VR headset 
 
 ## Setup
 
-####A.
+####Option A: IMA Laptop
 We will be providing a limited amount of laptops to students with Unity and the Oculus SDK pre-installed.
 
-####B.
+####Option B: Your own laptop
 If you are bringing your own machine you need download Unity 5 and a copy of the Oculus VR SDK.<br/>
 
-**Download and install Unity 5:** [http://unity3d.com/get-unity](Unity 5 Download)
+**1. Download and install Unity 5:** [http://unity3d.com/get-unity](Unity 5 Download)
 
-**Oculus SDK (Mac) :**
+**2. Download the oppropriate Oculus SDK and Runtime for your machine:**
 
-**Oculus SDK (Windows):**
+[https://developer.oculus.com/downloads/#version=pc-0.5.0.1-beta](Download)
+
 
 <br />
 
