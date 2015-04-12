@@ -39,6 +39,7 @@ Christian will provide an overview to development in Unity 5. An overview of the
 	 
 ## Part 2 
 ### Visualizing our Music
+We will also be introducing IMA's very own **VizKit** - a simple tool and collection of scripts to create VR visualizations in Unity.
 
 * Intro to generative content (45min - 1hr)
 	* Lets make our objects react to the music
