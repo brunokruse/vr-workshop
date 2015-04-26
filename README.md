@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/brunokruse/vr-workshop/master/screenshots/s3.png)
 
-### VR Programming Workshop
+### VR Music Visualization Workshop
 We're inviting NYU Shanghai's VR whizz-kids to spend 2 hours teaching participants how to create their very own virtual reality music visualization engine in Unity 5. The workshop will be presented in both NYU Abu Dhabi and Shanghai. Online participants will be able to join in via our VR chatroom as it's presented.
 
 At the end of the workshop, you'll be able to strap on an Oculus DK2 VR headset and chill (or rock) out to your favorite music in your very own immersive simulation.
