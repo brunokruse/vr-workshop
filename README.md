@@ -1,3 +1,5 @@
+![](https://raw.githubusercontent.com/brunokruse/vr-workshop/master/screenshots/s3.png)
+
 ### VR Programming Workshop
 We're inviting NYU Shanghai's VR whizz-kids to spend 2 hours teaching participants how to create their very own virtual reality music visualization engine in Unity 5. The workshop will be presented in both NYU Abu Dhabi and Shanghai. Online participants will be able to join in via our VR chatroom as it's presented.
 
@@ -38,6 +40,9 @@ Christian will provide an overview to development in Unity 5. An overview of the
 	* What are scripts?
 	* Creating our own public variable
 	 
+<br />
+
+
 ## Part 2 
 ### Visualizing our Music
 We will also be introducing a simple set of tools and scripts to create VR visualizations in Unity.
@@ -49,6 +54,8 @@ We will also be introducing a simple set of tools and scripts to create VR visua
 	* GetOutputData(); vs GetSpectrumData();
 	* Reactive Scaling, Rotations, Coloring and Particle Systems
 	* Advanced Example
+
+<br />
 
 ## Part 3
 ### Demos via VR Jukebox
