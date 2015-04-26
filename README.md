@@ -43,7 +43,9 @@ Christian will provide an overview to development in Unity 5. An overview of the
 <br />
 
 
-## Part 2 
+## Part 2
+![](https://raw.githubusercontent.com/brunokruse/vr-workshop/master/screenshots/s0.png)
+![](https://raw.githubusercontent.com/brunokruse/vr-workshop/master/screenshots/s1.png)
 ### Visualizing our Music
 We will also be introducing a simple set of tools and scripts to create VR visualizations in Unity.
 
@@ -58,6 +60,7 @@ We will also be introducing a simple set of tools and scripts to create VR visua
 <br />
 
 ## Part 3
+![](https://raw.githubusercontent.com/brunokruse/vr-workshop/master/screenshots/s4.png)
 ### Demos via VR Jukebox
 
 * Upload your project to class dropbox
