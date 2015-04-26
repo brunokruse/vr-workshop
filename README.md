@@ -10,7 +10,7 @@ At the end of the workshop, you'll be able to strap on an Oculus DK2 VR headset 
 
 ## Setup
 
-####Option A: IMA Laptop
+####Option A: IM Laptop
 We will be providing a limited amount of laptops to students with Unity and the Oculus SDK pre-installed.
 
 ####Option B: Your own laptop
@@ -30,6 +30,7 @@ If you are bringing your own machine you need download Unity 5 and a copy of the
 Christian will provide an overview to development in Unity 5. An overview of the Unity interface, basic scriping and new Unity 5 features will be discussed.
 
 * Intro to Unity (30 - 45 min)
+	* http://ima.nyu.sh/interaction-lab/vr-workshop
 	* Oculus Demo. What we will be making today.
 	* Intro to Game Objects 
 	* Primitives (Cubes, Spheres, Planes)
