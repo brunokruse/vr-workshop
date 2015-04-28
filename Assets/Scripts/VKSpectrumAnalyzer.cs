@@ -33,12 +33,14 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 	// beat detection
 	[Range(0, 1)]
 	public float decay = 0.03f; 		// used to adjust rate of the beat fires
+	public AnimationCurve thresholds = AnimationCurve.Linear (0, 0, 0.5f, 0.5f);
 	[Range(0, 1)]
 	public float beatThreshold = 0.01f; // minimum amount of RMS to fire a beat
 	public float beatThresholdMin; 		//  min
 	public float fireRate;				// max fire rate of the beat detect / to adjust for accuracy
 	private float lastFire;				// keep track of the last time we fired
 	public string beatType;				// detecting high, mids and lows
+	private float playhead = 0.0f;
 
 	// viz objects
 	public GameObject bar;		// our generic prefab for visualizing our data
@@ -51,6 +53,7 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 	public bool sendPitch = false;		// broadcasts pitch to all listeners
 	public bool sendBeat = true;		// broadcasts beat to all listeners
 	public bool drawDebug = false;		// displays debug information to console
+	public bool enableExperimental = false;
 	
 
 	// Use this for initialization
@@ -122,6 +125,13 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 
 		// print the RMS for debugging purposes
 		//if (drawDebug) { Debug.Log ("RMS: " + rmsValue); }
+
+		if (enableExperimental) {
+			playhead = GetComponent<AudioSource> ().time / GetComponent<AudioSource> ().clip.length;
+			beatThreshold = thresholds.Evaluate (playhead);
+			//Debug.Log("threshold: " + thresholds.Evaluate (playhead));
+		}
+
 	}
 
 	void getSpectrumData() {
@@ -154,9 +164,18 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 		pitchValue = freqN * (sampleRate / 2) / precision;
 
 		if (pitchValue > 0) {
+
+			if (maxN < 6) {
+				beatType = "low";
+			} else if (maxN >= 6 && maxN < 40) {
+				beatType = "mid";
+			} else if (maxN >= 40) {
+				beatType = "high";
+			}
 			//Debug.Log (pitchValue);
 			//Debug.Log (maxN);
 		}
+
 	}
 
 //	void getSpectrumDataForRange(string type, int lowR, int highR) {
