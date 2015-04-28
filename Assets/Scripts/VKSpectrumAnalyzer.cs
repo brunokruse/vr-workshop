@@ -21,6 +21,9 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 	public float rmsValue; 		// sound level - RMS -> currently being used for scaling
 	public float dbValue; 		// sound level - dB
 	public float pitchValue; 	// sound level Hz -> currently being used for colors
+	public float lowValue;		// low
+	public float midValue;		// mids
+	public float highValue;		// highs
 
 	// beat detection
 	public float decay = 0.03f; 		// used to adjust rate of the beat fires
@@ -28,6 +31,7 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 	public float beatThresholdMin; 		//  min
 	public float fireRate;				// max fire rate of the beat detect / to adjust for accuracy
 	private float lastFire;				// keep track of the last time we fired
+	public string beatType;				// detecting high, mids and lows
 
 	// viz objects
 	public GameObject bar;		// our generic prefab for visualizing our data
@@ -40,6 +44,7 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 	public bool sendPitch = false;		// broadcasts pitch to all listeners
 	public bool sendBeat = true;		// broadcasts beat to all listeners
 	public bool drawDebug = false;		// displays debug information to console
+	
 
 	// Use this for initialization
 	void Start () {
@@ -102,6 +107,10 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 		}
 
 		// 3. DETECT BEATS ----
+		// index caps: low 85, mid 170, high 256
+		//getSpectrumDataForRange ("low", 0, 85);
+		//getSpectrumDataForRange ("mid", 85, 170);
+		//getSpectrumDataForRange ("high", 170, 256);
 		detectBeats ();
 
 		// print the RMS for debugging purposes
@@ -114,9 +123,9 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 		GetComponent<AudioSource>().GetSpectrumData(spectrum, 0, FFTWindow.BlackmanHarris);
 
 
+		// LOW RANGE
 		float maxV = 0;
 		int maxN = 0;
-
 		for (int i = 0; i < precision; i++){ // find max 
 			if (spectrum[i] > maxV && spectrum[i] > threshold){
 				maxV = spectrum[i];
@@ -124,6 +133,8 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 			}
 		}
 
+
+		// get the frequency of the max
 		float freqN = maxN; // pass the index to a float variable
 		if (maxN > 0 && maxN < precision-1){ // interpolate index using neighbours
 			var dL = spectrum[maxN-1]/spectrum[maxN];
@@ -131,10 +142,47 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 			freqN += 0.5f * (dR * dR - dL * dL);
 		}
 
+
 		//pitchValue = freqN * AudioSettings.outputSampleRate / precision; // convert index to frequency based on sample rate
+		pitchValue = freqN * (sampleRate / 2) / precision;
 
-		pitchValue = freqN * sampleRate / precision;
+		if (pitchValue > 0) {
+			Debug.Log (pitchValue);
+			Debug.Log (maxN);
+		}
+	}
 
+	void getSpectrumDataForRange(string type, int lowR, int highR) {
+
+		GetComponent<AudioSource>().GetSpectrumData(spectrum, 0, FFTWindow.BlackmanHarris);
+
+		float maxV = 0;
+		int maxN = 0;
+		for (int i = lowR; i < highR; i++){ // find max 
+			if (spectrum[i] > maxV && spectrum[i] > threshold){
+				maxV = spectrum[i];
+				maxN = i; // maxN is the index of max
+			}
+		}
+
+		// get the frequency of the max
+		float freqN = maxN; // pass the index to a float variable
+		if (maxN > lowR && maxN < highR - 1){ // interpolate index using neighbours
+			var dL = spectrum[maxN-1]/spectrum[maxN];
+			var dR = spectrum[maxN+1]/spectrum[maxN];
+			freqN += 0.5f * (dR * dR - dL * dL);
+		}
+		
+
+		if (type == "low")
+			lowValue = freqN * sampleRate / ( precision / 3);
+		if (type == "mid")
+			midValue = freqN * sampleRate / ( precision / 3);
+		if (type == "high")
+			highValue = freqN * sampleRate / ( precision / 3);
+
+		//Debug.Log ("LOW: " + lowValue + " MID: " + midValue + " HIGH: " + highValue); 
+	
 	}
 
 	void getOutputData() {
@@ -174,22 +222,18 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 
 		*/
 
-		// always send the pitch even if offbeat
-		if (pitchValue != 0 && sendPitch) {
-			BroadcastMessage ("BeatHitPitch", pitchValue);
-
-			// debug log
-			if (drawDebug) { Debug.Log ("PITCH: " + pitchValue); }
-
-		}
 
 		if (rmsValue > beatThreshold && Time.time > fireRate + lastFire) {
 			beatThreshold = rmsValue;
 
 			if (sendBeat)
 				BroadcastMessage ("BeatHit", rmsValue);
-			//if (sendPitch)
-			//	BroadcastMessage ("BeatHitPitch", pitchValue);
+
+			// send the pitch
+			if (pitchValue != 0 && sendPitch) {
+				BroadcastMessage ("BeatHitPitch", pitchValue);
+				if (drawDebug) { Debug.Log ("PITCH: " + pitchValue); } // debug log
+			}
 
 			lastFire = Time.time;
 

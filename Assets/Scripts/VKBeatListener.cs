@@ -19,4 +19,17 @@ public class VKBeatListener : MonoBehaviour {
 
 	}
 
+	void lowHit() {
+		Debug.Log("LOW HIT");
+
+	}
+
+	void midHit() {
+		Debug.Log("MID HIT");
+	}
+
+	void highHit() {
+		Debug.Log("HIGH HIT");
+	}
+
 }
