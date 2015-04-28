@@ -14,7 +14,7 @@ public class VKParticleController : MonoBehaviour {
 	
 		baseEmit = 100;
 		exciteThreshold = 0.1f;
-		name = "CirclePusher";
+		name = name;
 		particleSystem = GameObject.Find (name);
 		particleSystem.GetComponent<ParticleSystem> ().emissionRate = 0;
 	}

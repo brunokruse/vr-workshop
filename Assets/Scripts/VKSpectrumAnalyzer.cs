@@ -7,18 +7,20 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 	// RMS: Root mean square
 	// Hertz (GetSpectrumData)
 
+	// main settings
 	//float refValue = 0.1f; 	 // RMS value for 0 dB
-	float threshold = 0.02f; 	 // minimum amplitude to extract pitch
-	int precision = 64; 	 	 // qSamples && number of bars
 	float sampleRate;		 	 // Audio sample rate
+	float threshold = 0.02f; 	 // minimum amplitude to extract pitch
+	int precision = 256; 	 	 // qSamples && number of bars
 	public float logScale = 8;	 // object scaler
 
-	public float rmsValue; 		// sound level - RMS -> currently being used for scaling
-	public float dbValue; 		// sound level - dB
-	public float pitchValue; 	// sound level Hz -> currently being used for colors
+	// spectrums
 	float[] samplesL;	// Left Channel
 	float[] samplesR;	// Right Channel
 	float[] spectrum;	// Frequency spectrum
+	public float rmsValue; 		// sound level - RMS -> currently being used for scaling
+	public float dbValue; 		// sound level - dB
+	public float pitchValue; 	// sound level Hz -> currently being used for colors
 
 	// beat detection
 	public float decay = 0.03f; 		// used to adjust rate of the beat fires
@@ -32,14 +34,12 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 	GameObject[] barsSpectrum;	// array of bars for spectrum
 	GameObject[] barsOutput;	// array of bars for output RMS power
 
-	// OPTIONS
-	public bool drawFrequency = false;
-	public bool drawOutput = false;
-
-	public bool sendPitch = false;
-	public bool sendBeat = true;
-
-	public bool drawDebug = false;
+	// broadcast options
+	public bool drawFrequency = false;	// enables/disables the frequency bars
+	public bool drawOutput = false;		// enables/disables the RMS / Power bars
+	public bool sendPitch = false;		// broadcasts pitch to all listeners
+	public bool sendBeat = true;		// broadcasts beat to all listeners
+	public bool drawDebug = false;		// displays debug information to console
 
 	// Use this for initialization
 	void Start () {
@@ -52,9 +52,8 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 
 		// beats
 		beatThresholdMin = beatThreshold;
-		//fireRate = 0.1f;
+		//fireRate = 0.1f; // maximum rate of fire to avoid false positives
 
-		//GameObject bar = GameObject.FindWithTag ("Bar");
 		barsSpectrum = new GameObject[precision];
 		barsOutput = new GameObject[precision];
 
@@ -76,7 +75,7 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		// RMS VIZ ----
+		// 1. RMS VIZ ----
 		getOutputData ();
 		for (int i = 0; i < precision; i++)
 		{
@@ -90,11 +89,8 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 		}
 		rmsValue = Mathf.Sqrt(rmsValue / (float)precision);
 
-		if (drawDebug) {
-			Debug.Log ("RMS: " + rmsValue);
-		}
 
-		// PITCH VIZ ----
+		// 2. PITCH VIZ ----
 		getSpectrumData ();
 		for (int i = 0; i < precision; i++) 
 		{
@@ -105,18 +101,18 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 			}
 		}
 
-		// DETECT BEATS ----
+		// 3. DETECT BEATS ----
 		detectBeats ();
 
-		if (Input.GetKeyDown (KeyCode.A)) {
-		}
-
+		// print the RMS for debugging purposes
+		//if (drawDebug) { Debug.Log ("RMS: " + rmsValue); }
 	}
 
 	void getSpectrumData() {
 
 		// Pass the spectrum data to the spectrum array
 		GetComponent<AudioSource>().GetSpectrumData(spectrum, 0, FFTWindow.BlackmanHarris);
+
 
 		float maxV = 0;
 		int maxN = 0;
@@ -136,8 +132,8 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 		}
 
 		//pitchValue = freqN * AudioSettings.outputSampleRate / precision; // convert index to frequency based on sample rate
+
 		pitchValue = freqN * sampleRate / precision;
-		//Debug.Log ("pitch: " + pitchValue);
 
 	}
 
@@ -173,18 +169,17 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 
 			1. Track a threshold volume level.
 			2. If the current volume exceeds the threshold then you have a beat. Set the new threshold to the current volume.
-			3. Reduce the threshold over time, using the Decay Rate.
+			3. Reduce the threshold ovedwr time, using the Decay Rate.
 			4. Wait for the Hold Time before detecting for the next beat. This can help reduce false positives.
 
 		*/
 
-		// always send the pitch
-		if (pitchValue != 0) {
+		// always send the pitch even if offbeat
+		if (pitchValue != 0 && sendPitch) {
 			BroadcastMessage ("BeatHitPitch", pitchValue);
 
-			if (drawDebug) {
-				Debug.Log ("PITCH: " + pitchValue);
-			}
+			// debug log
+			if (drawDebug) { Debug.Log ("PITCH: " + pitchValue); }
 
 		}
 
