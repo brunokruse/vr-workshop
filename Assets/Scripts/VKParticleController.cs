@@ -8,6 +8,10 @@ public class VKParticleController : MonoBehaviour {
 	public float baseEmit;
 	public float exciteThreshold;
 	public string beatLevel = "none";
+	
+	public int lowBlast = 10;
+	public int midBlast = 60;
+	public int highBlast = 720;
 
 	// Use this for initialization
 	void Start () {
@@ -34,15 +38,15 @@ public class VKParticleController : MonoBehaviour {
 			
 			
 			if (hZ > 0f && hZ < 100) {
-				baseEmit = 10;
+				baseEmit = lowBlast;
 				beatLevel = "low";
 				
 			} else if (hZ > 100 && hZ < 300) {
-				baseEmit = 60;
+				baseEmit = midBlast;
 				beatLevel = "med";
 				
 			} else if (hZ > 600) {
-				baseEmit = 720;
+				baseEmit = highBlast;
 				beatLevel = "high";
 				
 			}
@@ -50,8 +54,10 @@ public class VKParticleController : MonoBehaviour {
 			particleSystem.GetComponent<ParticleSystem> ().Emit ((int) (baseEmit * Time.deltaTime));
 
 		}
-
-
 		
+	}
+
+	void BeatHit(float RMS) {
+
 	}
 }

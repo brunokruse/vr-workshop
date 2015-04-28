@@ -3,8 +3,11 @@ using System.Collections;
 
 public class AutoRotate : MonoBehaviour {
 
+	[Range(0, 100)]
 	public float X = 0.0f;
+	[Range(0, 100)]
 	public float Y = 0.0f;
+	[Range(0, 100)]
 	public float Z = 0.0f;
 	public float globalSpeed = 1.0f;
 
@@ -17,6 +20,8 @@ public class AutoRotate : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Rotate(new Vector3(Random.Range(X * 0.1f, X) * Time.deltaTime * globalSpeed, Random.Range(Y * 0.1f, Y) * Time.deltaTime * globalSpeed, Random.Range(Z * 0.1f, Z) * Time.deltaTime * globalSpeed ) );
+		transform.Rotate(new Vector3(X * Time.smoothDeltaTime * globalSpeed,
+		                             Y * Time.smoothDeltaTime * globalSpeed, 
+		                             Z * Time.smoothDeltaTime * globalSpeed ) );
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections;
 
 public class VKScale : MonoBehaviour {
 
+	[Range(0, 10)]
 	public float scalePower = 1.8f;
 	public float scaleOG;
 	Vector3 tmpScale;
@@ -25,6 +26,10 @@ public class VKScale : MonoBehaviour {
 		// Debug.Log ("Pow! " + RMS * scalePower);
 		tmpScale =  new Vector3(1 + RMS * scalePower, 1 + RMS * scalePower, 1 + RMS * scalePower);
 		//tmpScale += startScale;
+	}
+
+	void BeatHitPitch(float inPitch) {
+		
 	}
 
 }

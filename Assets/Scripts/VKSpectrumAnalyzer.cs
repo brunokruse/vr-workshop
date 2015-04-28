@@ -19,14 +19,21 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 	float[] samplesR;	// Right Channel
 	float[] spectrum;	// Frequency spectrum
 	public float rmsValue; 		// sound level - RMS -> currently being used for scaling
-	public float dbValue; 		// sound level - dB
+	private float dbValue; 		// sound level - dB
 	public float pitchValue; 	// sound level Hz -> currently being used for colors
-	public float lowValue;		// low
-	public float midValue;		// mids
-	public float highValue;		// highs
+
+	// lows, mid, highs
+	//public float lowValue;		// low
+	//public float midValue;		// mids
+	//public float highValue;		// highs
+	//public bool isLow; // 2
+	//public bool isMid; 
+	//public bool isHigh; // 80
 
 	// beat detection
+	[Range(0, 1)]
 	public float decay = 0.03f; 		// used to adjust rate of the beat fires
+	[Range(0, 1)]
 	public float beatThreshold = 0.01f; // minimum amount of RMS to fire a beat
 	public float beatThresholdMin; 		//  min
 	public float fireRate;				// max fire rate of the beat detect / to adjust for accuracy
@@ -72,7 +79,7 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 
 		for (int i = 0; i < precision; i++) {
 			barsOutput[i] = GameObject.Instantiate(bar, new Vector3(16.0f - (i * (32.0f / (float)precision)), 0.0f, -40.0f), Quaternion.identity) as GameObject;	
-			barsOutput[i].transform.localScale = new Vector3(32.0f / (float)precision, 1.0f, 1.0f);
+			barsOutput[i].transform.localScale = new Vector3(precision / (float)precision, 1.0f, 1.0f);
 		}
 
 	}
@@ -120,7 +127,7 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 	void getSpectrumData() {
 
 		// Pass the spectrum data to the spectrum array
-		GetComponent<AudioSource>().GetSpectrumData(spectrum, 0, FFTWindow.BlackmanHarris);
+		GetComponent<AudioSource>().GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
 
 
 		// LOW RANGE
@@ -147,43 +154,43 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 		pitchValue = freqN * (sampleRate / 2) / precision;
 
 		if (pitchValue > 0) {
-			Debug.Log (pitchValue);
-			Debug.Log (maxN);
+			//Debug.Log (pitchValue);
+			//Debug.Log (maxN);
 		}
 	}
 
-	void getSpectrumDataForRange(string type, int lowR, int highR) {
-
-		GetComponent<AudioSource>().GetSpectrumData(spectrum, 0, FFTWindow.BlackmanHarris);
-
-		float maxV = 0;
-		int maxN = 0;
-		for (int i = lowR; i < highR; i++){ // find max 
-			if (spectrum[i] > maxV && spectrum[i] > threshold){
-				maxV = spectrum[i];
-				maxN = i; // maxN is the index of max
-			}
-		}
-
-		// get the frequency of the max
-		float freqN = maxN; // pass the index to a float variable
-		if (maxN > lowR && maxN < highR - 1){ // interpolate index using neighbours
-			var dL = spectrum[maxN-1]/spectrum[maxN];
-			var dR = spectrum[maxN+1]/spectrum[maxN];
-			freqN += 0.5f * (dR * dR - dL * dL);
-		}
-		
-
-		if (type == "low")
-			lowValue = freqN * sampleRate / ( precision / 3);
-		if (type == "mid")
-			midValue = freqN * sampleRate / ( precision / 3);
-		if (type == "high")
-			highValue = freqN * sampleRate / ( precision / 3);
-
-		//Debug.Log ("LOW: " + lowValue + " MID: " + midValue + " HIGH: " + highValue); 
-	
-	}
+//	void getSpectrumDataForRange(string type, int lowR, int highR) {
+//
+//		GetComponent<AudioSource>().GetSpectrumData(spectrum, 0, FFTWindow.BlackmanHarris);
+//
+//		float maxV = 0;
+//		int maxN = 0;
+//		for (int i = lowR; i < highR; i++){ // find max 
+//			if (spectrum[i] > maxV && spectrum[i] > threshold){
+//				maxV = spectrum[i];
+//				maxN = i; // maxN is the index of max
+//			}
+//		}
+//
+//		// get the frequency of the max
+//		float freqN = maxN; // pass the index to a float variable
+//		if (maxN > lowR && maxN < highR - 1){ // interpolate index using neighbours
+//			var dL = spectrum[maxN-1]/spectrum[maxN];
+//			var dR = spectrum[maxN+1]/spectrum[maxN];
+//			freqN += 0.5f * (dR * dR - dL * dL);
+//		}
+//		
+//
+//		if (type == "low")
+//			//lowValue = freqN * (sampleRate / 2) / ( precision / 3);
+//		if (type == "mid")
+//			//midValue = freqN * (sampleRate / 2) / ( precision / 3);
+//		if (type == "high")
+//			//highValue = freqN * (sampleRate / 2) / ( precision / 3);
+//
+//		//Debug.Log ("LOW: " + lowValue + " MID: " + midValue + " HIGH: " + highValue); 
+//	
+//	}
 
 	void getOutputData() {
 
@@ -206,7 +213,7 @@ public class VKSpectrumAnalyzer : MonoBehaviour {
 		if (dbValue < -160) { 
 			dbValue = -160; // clamp it to -160dB min
 		}
-		*/
+		 */
 
 	}
 
