@@ -18,7 +18,12 @@ public class VKParticleController : MonoBehaviour {
 	
 		baseEmit = 100;
 		exciteThreshold = 0.1f;
-		name = name;
+
+		// if the name ie empty assign it a default
+		if (name.Length == 0) {
+			name = "Particle System";
+		}
+
 		particleSystem = GameObject.Find (name);
 		particleSystem.GetComponent<ParticleSystem> ().emissionRate = 0;
 	}
@@ -36,7 +41,6 @@ public class VKParticleController : MonoBehaviour {
 
 			float hZ = inPitch;
 			
-			
 			if (hZ > 0f && hZ < 100) {
 				baseEmit = lowBlast;
 				beatLevel = "low";
@@ -51,8 +55,8 @@ public class VKParticleController : MonoBehaviour {
 				
 			}
 
+			// set the emmision power based ont he incoming pitch
 			particleSystem.GetComponent<ParticleSystem> ().Emit ((int) (baseEmit * Time.deltaTime));
-
 		}
 		
 	}

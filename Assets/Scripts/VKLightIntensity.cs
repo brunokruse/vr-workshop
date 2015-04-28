@@ -4,7 +4,10 @@ using System.Collections;
 public class VKLightIntensity : MonoBehaviour {
 
 	public GameObject light;
-	public float lightPower;
+
+	private float lightPower;
+	public float scalePower = 2.0f;
+	public float speed = 5.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -15,12 +18,14 @@ public class VKLightIntensity : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
-		light.GetComponent<Light> ().intensity = lightPower;
+		// lerp the light intensity
+		light.GetComponent<Light> ().intensity = Mathf.Lerp(light.GetComponent<Light> ().intensity, lightPower, Time.deltaTime * speed); 
 	}
 
 	void BeatHit(float RMS) {
-		// Debug.Log ("Pow! " + RMS * scalePower);
-		lightPower = 1.0f + (0.5f * RMS * 10.0f);
+
+		// adjust the light power
+		lightPower = 1.0f + RMS * scalePower;
 
 	}
 }

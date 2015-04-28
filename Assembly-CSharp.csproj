@@ -64,12 +64,13 @@
      <Compile Include="Assets\OVR\Scripts\Util\OVRUGUI.cs" />
      <Compile Include="Assets\Scripts\AutoRotate.cs" />
      <Compile Include="Assets\Scripts\Cameras\AbstractTargetFollower.cs" />
-     <Compile Include="Assets\Scripts\Cameras\ForwardMove.cs" />
      <Compile Include="Assets\Scripts\Cameras\LookatTarget.cs" />
-     <Compile Include="Assets\Scripts\Cameras\RotateAround.cs" />
+     <Compile Include="Assets\Scripts\ForwardMove.cs" />
      <Compile Include="Assets\Scripts\LinearMove.cs" />
+     <Compile Include="Assets\Scripts\MeshWaves.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\RandomGenerate.cs" />
+     <Compile Include="Assets\Scripts\RotateAround.cs" />
      <Compile Include="Assets\Scripts\VKBeatListener.cs" />
      <Compile Include="Assets\Scripts\VKColor.cs" />
      <Compile Include="Assets\Scripts\VKLightIntensity.cs" />
